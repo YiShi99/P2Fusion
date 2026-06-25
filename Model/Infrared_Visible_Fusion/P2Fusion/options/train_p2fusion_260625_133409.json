@@ -1,0 +1,99 @@
+{
+  "task": "P2Fusion",
+  "model": "P2Fusion",
+  "gpu_ids": [
+    0
+  ],
+  "dist": false,
+  "scale": 1,
+  "n_channels": 3,
+  "path": {
+    "root": "Model/Infrared_Visible_Fusion",
+    "pretrained_netG": null,
+    "pretrained_netE": null,
+    "task": "Model/Infrared_Visible_Fusion\\P2Fusion",
+    "log": "Model/Infrared_Visible_Fusion\\P2Fusion",
+    "options": "Model/Infrared_Visible_Fusion\\P2Fusion\\options",
+    "models": "Model/Infrared_Visible_Fusion\\P2Fusion\\models",
+    "images": "Model/Infrared_Visible_Fusion\\P2Fusion\\images",
+    "pretrained_optimizerG": null
+  },
+  "datasets": {
+    "train": {
+      "name": "train_dataset",
+      "dataset_type": "vif",
+      "dataroot_A": "Dataset/trainsets/MSRS/ir",
+      "dataroot_B": "Dataset/trainsets/MSRS/vi",
+      "dataloader_shuffle": true,
+      "dataloader_num_workers": 8,
+      "dataloader_batch_size": 8,
+      "phase": "train",
+      "scale": 1,
+      "n_channels": 3
+    },
+    "test": {
+      "name": "test_dataset",
+      "dataset_type": "vif",
+      "dataroot_A": "Dataset/valsets/MSRS/ir",
+      "dataroot_B": "Dataset/valsets/MSRS/vi",
+      "phase": "test",
+      "scale": 1,
+      "n_channels": 3
+    }
+  },
+  "netG": {
+    "net_type": "p2fusion",
+    "in_chans": 3,
+    "prompt_channels": 8,
+    "window_size": 8,
+    "img_range": 1.0,
+    "embed_dim": 60,
+    "mlp_ratio": 2,
+    "init_type": "default",
+    "scale": 1
+  },
+  "train": {
+    "E_decay": 0.999,
+    "G_optimizer_type": "adam",
+    "G_optimizer_lr": 0.0005,
+    "G_optimizer_wd": 0,
+    "G_optimizer_clipgrad": 0,
+    "G_optimizer_reuse": true,
+    "G_scheduler_type": "MultiStepLR",
+    "use_teacher_loss": true,
+    "lambda_ir_prompt": 0.5,
+    "lambda_vis_prompt": 5,
+    "lambda_adaptive_intensity": 8,
+    "lambda_ssim_global": 25,
+    "lambda_gradient": 20,
+    "G_scheduler_milestones": [
+      3000,
+      6000,
+      9000,
+      12000,
+      15000
+    ],
+    "G_scheduler_gamma": 0.5,
+    "G_regularizer_orthstep": 0,
+    "G_regularizer_clipstep": 0,
+    "G_param_strict": true,
+    "E_param_strict": true,
+    "checkpoint_test": 200,
+    "checkpoint_save": 200,
+    "checkpoint_print": 200,
+    "F_feature_layer": 34,
+    "F_weights": 1.0,
+    "F_lossfn_type": "l1",
+    "F_use_input_norm": true,
+    "F_use_range_norm": false
+  },
+  "opt_path": "options/train_p2fusion.json",
+  "is_train": true,
+  "merge_bn": false,
+  "merge_bn_startpoint": -1,
+  "find_unused_parameters": true,
+  "num_gpu": 1,
+  "local_rank": 0,
+  "rank": 0,
+  "world_size": 1
+}
